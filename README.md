@@ -1,18 +1,94 @@
-![jroff](https://cloud.githubusercontent.com/assets/4419992/11488319/61d7086e-97a4-11e5-9ea7-2276c409c208.png)
-
-![travis](https://travis-ci.org/roperzh/jroff.svg?branch=master)
-[![Code Climate](https://codeclimate.com/github/roperzh/jroff/badges/gpa.svg)](https://codeclimate.com/github/roperzh/jroff)
-[![Test Coverage](https://codeclimate.com/github/roperzh/jroff/badges/coverage.svg)](https://codeclimate.com/github/roperzh/jroff/coverage)
-
 ## About
+This is the repo forked from Jroff. The original macro has doc.js (full support for `doc` macros), an.js (full support for `an` macros), and default.js (partial support for groff-native commands). In this repo, I will focus on extending the doc.js to fully support FreeBSD `mdoc` syntax. The below list all macros in `mdoc` and the macro has ": no" string means it is the macro not in the origin `doc` macro which I need to implement.
 
-*For a real-life example of Jroff in action, check out [grapse](http://www.roperzh.com/grapse).*
+1. Dd
+2. Dt
+3. Os
+4. Nm
+5. Nd
+6. Sh
+7. Ss
+8. Sx: no, Osx: yes (the `doc` macro has but `mdoc` doesn't have)
+9. Xr
+10. Tg: no
+11. Pp
+12. Bd: no
+13. Ed: no
+14. D1: no
+15. Dl: no
+16. Ql
+17. Bl
+18. El
+19. It
+20. Ta: no
+21. Rs
+22. %A, %B, %C: no, %D, %I, %J, %N, %O, %P, %Q, %R, %T, %U: no, %V, 
+23. Re
+24. Pf
+25. Ns: no
+26. Ap: no
+27. Sm: no
+28. Bk: no
+29. Ek: no
+30. Nm
+31. Fl
+32. Cm
+33. Ar
+34. Op
+35. Oo
+36. Oc
+37. Ic: no
+38. Ev
+39. Pa
+40. Lb: no
+41. In: no
+42. Fd: no
+43. Ft
+44. Fo
+45. Fc
+46. Fn
+47. Fa
+48. Vt
+49. Va
+50. Dv
+51. Er: no
+52. Ev
+53. An
+54. Lk: no
+55. Mt: no
+56. Cd
+57. Ad
+58. Ms: no
+59. Em
+60. Sy
+61. No: no
+62. Bf
+63. Ef
+64. Dq, Do, Dc
+65. Qq, Qo, Qc
+66. Sq, So, Sc
+67. Pq, Po, Pc
+68. Bq, Bo, Bc
+69. Brq, Bro, Brc
+70. Aq, Ao, Ac
+71. Eo, Ec
+72. Ex  -std: no
+73. Rv  -std: no
+74. St
+75. At
+76. Bx
+77. Bsx: no
+78. Nx
+79. Fx
+80. Ox
+81. Dx
 
-Jroff is a man page parser written in JavaScript, featuring:
-
-- Partial support for groff-native commands
-- Full support for `an` macros
-- Full support for `doc` macros
+The main build way is `make build` which will combine the js files into a single jroff.js in the `dist` folder in this order:
+1. preamble.js
+2. jroff.js
+3. macro/*.js
+4. postamble.js
+All you need is to import the dist/jroff.js then you can use this tool.
 
 The main functionality of the library is to produce an [AST](https://en.wikipedia.org/wiki/Abstract_syntax_tree) ready to
 be consumed by a generator.
