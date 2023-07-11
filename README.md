@@ -1,5 +1,5 @@
 ## About
-This is the repo forked from Jroff. The original macro has doc.js (full support for `doc` macros), an.js (full support for `an` macros), and default.js (partial support for groff-native commands). In this repo, I will focus on extending the doc.js to fully support FreeBSD `mdoc` syntax. The below list all macros in `mdoc` and the macro has ": no" string means it is the macro not in the origin `doc` macro which I need to implement.
+This is the repo forked from [Jroff](https://github.com/roperzh/jroff). The original macro has doc.js (full support for `doc` macros), an.js (full support for `an` macros), and default.js (partial support for groff-native commands). In this repo, I will focus on extending the doc.js to fully support FreeBSD `mdoc` syntax. The below list all macros in `mdoc` and the macro has ": no" string means it is the macro not in the origin [`doc` macro](https://man.freebsd.org/cgi/man.cgi?mdoc(7)) which I need to implement.
 
 1. Dd
 2. Dt

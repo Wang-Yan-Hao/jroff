@@ -116,10 +116,10 @@ macros.doc = {
    */
   Dt: function (args) {
     var sideText,
-      midText,
-      title,
-      section,
-      volume;
+        midText,
+        title,
+        section,
+        volume;
 
     /* Parse the arguments string */
     args = this.parseArguments(args);
@@ -141,9 +141,9 @@ macros.doc = {
       if(volumes[volume]) {
         midText = volumes[volume];
       } else if(architectures.indexOf(volume) !== -1) {
-        midText = 'BSD/' + volume + docSections[this.buffer.section];
+        midText = 'FreeBSD ' + docSections[this.buffer.section] + ' (' + volume + ')';
       } else if(docSections[this.buffer.section]) {
-        midText = 'BSD' + docSections[this.buffer.section];
+        midText = 'FreeBSD ' + docSections[this.buffer.section];
       }
     }
 
