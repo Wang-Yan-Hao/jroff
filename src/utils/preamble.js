@@ -15,6 +15,6 @@
     } else {
       // Browser global scope, assign the module to the global object (root)
       root.Jroff = factory();
-    }t.Jroff = factory();
+    }
   }(this, function () { //eslint-disable-line max-statements, ESLint (JS format checker)
       "use strict"; // Enables a stricter set of rules for parsing and executing JavaScript code.

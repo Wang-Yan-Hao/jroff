@@ -16,7 +16,7 @@
     } else {
       // Browser global scope, assign the module to the global object (root)
       root.Jroff = factory();
-    }t.Jroff = factory();
+    }
   }(this, function () { //eslint-disable-line max-statements, ESLint (JS format checker)
       "use strict"; // Enables a stricter set of rules for parsing and executing JavaScript code.
 
@@ -703,7 +703,7 @@ var abbreviations = {
  * @namespace
  * @alias macros.doc
  * @since 0.0.1
- */
+  */
 macros.doc = {
 
   /**
@@ -802,7 +802,7 @@ macros.doc = {
    *
    */
   Os: function (os) {
-    this.buffer.os = os;
+    this.buffer.os = os || 'FreeBSD 14.0-CURRENT'; // Default use 14.0 current, but mandoc actually use -Ios argument or `uname`  
   },
 
   /**
@@ -2144,6 +2144,102 @@ macros.doc = {
    */
   Em: function (text) {
     return this.generateTag('i', text);
+  },
+
+  Sx: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ed: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  D1: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Dl: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ta: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  '%C': function (text) {
+    return this.generateTag('span', text);
+  },
+
+  '%U': function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ns: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ap: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Sm: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Bk: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ek: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ic: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Lb: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  In: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Fd: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Er: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Lk: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Mt: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  Ms: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  No: function (text) {
+    return this.generateTag('span', text);
+  },
+
+  'Ex -std': function (text) {
+    return this.generateTag('span', text);
+  },
+
+  'Rv -std': function (text) {
+    return this.generateTag('span', text);
+  },
+
+  BSx: function (text) {
+    return this.generateTag('span', text);
   }
 };
 
