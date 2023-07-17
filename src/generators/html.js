@@ -1,6 +1,7 @@
+// Generates HTML based on an AST hierarchy
 var HTMLGenerator = function () {};
 
-HTMLGenerator.prototype.generate = function (source, lib) {
+HTMLGenerator.prototype.generate = function (source, lib) { // lib parameter is not use now, this is use when you have different macros, but in this we only have one macro
   var parser,
     ast;
 
@@ -10,28 +11,38 @@ HTMLGenerator.prototype.generate = function (source, lib) {
 
   parser = new Parser(source);
   ast = parser.buildAST();
-  lib = lib || 'doc';
-
+  // lib = lib || 'doc';
+  lib = 'doc'; // Only set to 'doc' macro, this is also our only macro (FreeBSD mdoc)
+  console.log(ast)
   this.macros = mergeObjects([macros.defaults, macros[lib]]);
 
   /* Global variable, used to define if a token is imacro */
-  macroLib = lib;
+  // macroLib = lib;
+  macroLib = 'doc';  // Only set to doc macro, this is also our only macro
 
+  // Buffer to store the message while parsing
   this.buffer = {
-    style: {
-      indent: 8,
-      fontSize: 16
+    style: { // All macro
+      indent: 8, // Default set the tab sapce, ex the text below .Sh macro. The unit is %
+      fontSize: 16 // Defaul set the font size
     },
-    references: [],
-    lists: [],
-    openTags: [],
+    section: '', // Use for Sh macro
+    subSection: '', // Use for Ss macro
+    openTags: [], // Use for Pp macro
+    display: [], // Use for Bd, Ed macro
+    lists: [], // Use for Bl, El macro
+    references: [], // Rs macro
     fontModes: [],
     sectionTags: [],
-    activeFontModes: [],
-    section: ''
+    activeFontModes: [], // Use fo Bf Ef macro
+    InFoMacro: false // Use for Fo Fc macro
   };
 
-  return this.recurse(ast);
+  const ast_recurese = this.recurse(ast);
+  const day_tag = '</section><br><div style=" display: flex; justify-content: space-between;">' + 
+  '<span style="text-align: left;">' + this.buffer.date + 
+  '</span><span style="text-align: right;">' + this.buffer.os + '</span></div>';
+  return ast_recurese + day_tag;
 };
 
 /**
@@ -44,6 +55,7 @@ HTMLGenerator.prototype.generate = function (source, lib) {
  *
  */
 HTMLGenerator.prototype.recurse = function (arr) {
+  //console.log(arr);
   return arr.reduce(this.reduceRecursive.bind(this), '');
 };
 
@@ -58,23 +70,23 @@ HTMLGenerator.prototype.recurse = function (arr) {
  * @since 0.0.1
  *
  */
-HTMLGenerator.prototype.reduceRecursive = function (result, node) {
+HTMLGenerator.prototype.reduceRecursive = function (result, node) { // result is current local parsing result, node is current node
   var func,
     args;
 
-  if(canHaveNodes(node)) {
+  if(canHaveNodes(node)) { // Only escape, inline macro and macro can have node
     if(node.value === 'Sh' || node.value === 'SH') {
       result += this.closeAllTags(this.buffer.fontModes);
       result += this.closeAllTags(this.buffer.openTags);
     }
-
-    func = this.macros[node.value] || this.undefMacro;
-    args = node.nodes.length ? this.recurse(node.nodes) : '';
+    func = this.macros[node.value] || this.undefMacro; // Get the macro parsing 
+    args = node.nodes.length ? this.recurse(node.nodes) : ''; // Get argument begind the macro now
+    console.log('Macro:', node.value, 'Args:', args);
     result += func.call(this, args, node) || '';
   } else {
-    result += this.cleanQuotes(node.value);
+    result += this.cleanQuotes(node.value); // If not macro, clean the " character
   }
-
+  console.log('Result: ',result)
   return result;
 };
 
@@ -247,7 +259,8 @@ HTMLGenerator.prototype.closeTagsUntil = function (limitTag, tags) {
  * @returns {array}
  *
  * @since 0.0.1
- *
+ *Result:  ABCFGHILPRSTUWZabcdfghiklmnopqrstuvwxy1 
+
  */
 HTMLGenerator.prototype.parseArguments = function (args) {
   args = args.match(patterns.arguments) || [];

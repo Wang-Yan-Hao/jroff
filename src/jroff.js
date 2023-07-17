@@ -1,13 +1,35 @@
-// Different attribute with each token (token.kind)
-var COMMENT = 1,
-  MACRO = 2,
-  IMACRO = 3, // Inline macro
-  BREAK = 4,
-  TEXT = 5,
-  EMPTY = 6,
-  ESCAPE = 7;
+/**
+ * Jroff 0.0.1 <http://roperzh.github.io/jroff.js>
+ * Copyright (c)2015 Roberto Dip <http://roperzh.com>
+ * @license Distributed under MIT license
+ * @module Jroff
+ */
 
-// Macro list
+(function (root, factory) {
+  if(typeof define === 'function' && define.amd) {
+    // AMD module loader is available, define the module and its dependencies using define()
+    define([], factory);
+  } else if(typeof module === 'object' && module.exports) {
+    // CommonJS environment (e.g., Node.js), export the module using module.exports
+    module.exports = factory();
+  } else {
+    // Browser global scope, assign the module to the global object (root)
+    root.Jroff = factory();
+  }
+}(this, function () { //eslint-disable-line max-statements, ESLint (JS format checker)
+    "use strict"; // Enables a stricter set of rules for parsing and executing JavaScript code.
+
+// Different attribute of each token (Token.kind). There is functions to check the text is what attribute (Token.isMacro(), Token.isComment ...).
+var COMMENT = 1,
+    MACRO = 2,
+    IMACRO = 3, // Inline macro
+    BREAK = 4,
+    TEXT = 5,
+    EMPTY = 6,
+    ESCAPE = 7;
+
+// Macro list. The macro has a callable function.
+// This is used to check wheather the text is a inline macro (isInlineMacro function). So any inline macro you want to add must be add to this lis.
 var callableMacros = [
   'Ac', 'Ao', 'Bc', 'Bo', 'Brc', 'Bro', 'Dc', 'Do', 'Ec', 'Eo', 'Fc',
   'Oc', 'Oo', 'Pc', 'Po', 'Qc', 'Qo', 'Sc', 'So', 'Xc', 'Xo', 'Aq',
@@ -15,7 +37,7 @@ var callableMacros = [
   'An', 'Ap', 'Ar', 'At', 'Bsx', 'Bx', 'Cd', 'Cm', 'Dv', 'Dx', 'Em',
   'Er', 'Ev', 'Fa', 'Fl', 'Fn', 'Ft', 'Fx', 'Ic', 'Li', 'Lk', 'Ms',
   'Mt', 'Nm', 'Ns', 'Nx', 'Ox', 'Pa', 'Pf', 'Sx', 'Sy', 'Tn', 'Ux',
-  'Va', 'Vt', 'Xr'
+  'Va', 'Vt', 'Xr', "\\&",
 ];
 
 /**
@@ -33,6 +55,7 @@ var callableMacros = [
  * @since 0.0.1
  *
  */
+// Use for isMacro function ...
 var patterns = {
   // Pattern to match a macro at the beginning of a line
   macro: /^\./,
@@ -104,10 +127,11 @@ var mergeObjects = function (objects) {
  * @since 0.0.1
  *
  */
+// Modes is a collection of sub tokens, useful while parsing ( for example a macro with inline macros ).
 var canHaveNodes = function (token) {
-  // Check if the kind of the token is one of the specified values: MACRO, IMACRO, ESCAPE
+  // Check if the kind of the token is one of the specified values: MACRO, IMACRO, ESCAPE. So it have a sub node.
   return [MACRO, IMACRO, ESCAPE].indexOf(token.kind) !== -1
 };
 
-var macros = {},
-  macroLib = null;
+var macros = {}; // The macro map, key is the macro name and value is the funciton to extend that macro
+var macroLib = null;
