@@ -96,6 +96,77 @@ be consumed by a generator.
 At the moment, only a single HTML generator has been implemented, but the plan is
 to implement several more in the near future.
 
+## Utility function
+
+### Buffer
+```
+date // Dd
+
+title // Dt
+section
+volume
+sideText
+midText
+
+os // Os
+
+name // Nm
+firstMeetNm = true
+firstMacroSh = true
+
+openTag // Sh, Ss
+
+section // Sh
+
+Bd_unfill // BD, -unfilled or -literal
+
+Bl_type = [] // Bl type, nested Bl type
+Bl_tag = [] // Bl tag
+
+meetEscape = false // Escape Character
+
+
+```
+
+### Function
+```
+HTMLGenerator.prototype.recurse = function (arr, layer)
+HTMLGenerator.prototype.reduceRecursive = function (result, node, layer)
+HTMLGenerator.prototype.cleanQuotes = function (str)
+HTMLGenerator.prototype.generateTagWithClass = function (name, class_name, content)
+HTMLGenerator.prototype.splitHTMLString = function (htmlString)
+HTMLGenerator.prototype.generateAlternTag = function (tag1, tag2, c) 
+HTMLGenerator.prototype.closeTag = function (tag)
+HTMLGenerator.prototype.closeAllTags = function (tags)
+HTMLGenerator.prototype.closeTagsUntil = function (limitTag, tags)
+HTMLGenerator.prototype.parseArguments = function (args)
+HTMLGenerator.prototype.isInsideOfSection = function (section)
+HTMLGenerator.prototype.startWithNs = function isWrappedInTag(inputString, tagName) {
+  const regexPattern = new RegExp(`^<${tagName}>[\\s\\S]*<\/${tagName}>$`);
+  return regexPattern.test(inputString);
+}
+```
+### Variable
+```
+var COMMENT = 1,
+    MACRO = 2,
+    IMACRO = 3, // Inline macro
+    BREAK = 4,
+    TEXT = 5,
+    EMPTY = 6,
+    ESCAPE = 7;
+```
+
+```
+var callableMacros = []
+var macros = {}
+var libKey = {} // Lb macro
+var docSections = {} // Dt macro
+var architectures = {} // Dt macro
+var fontModes = {} // Bf macro
+var abbreviations = {} // St macro
+var specialCharacter = {} // All macro
+```
 ## Usage
 *An annotated version of the code can be found [here](http://www.roperzh.com/jroff/)*
 
@@ -255,44 +326,8 @@ An example of this using OS X:
 make doc
 open docs/index.html
 ```
-
-### Benchmarks
-
-Running benchmarks is a complicated task, even more so in this case
-since there aren't other libraries to use as a reference and compare
-the results with.
-
-Therefore, what these benchmarks are for is to compare different versions
-of the library with three arbitrary man pages: `Git`, `Node.js`,
-and `Ruby`
-
-This benchmark should be used only for drawing estimative comparisons between
-versions or complex features.
-
-If you want to run the benchmarks and compare the new data with the latest stored results:
-
-```console
-make bench
-```
-
-Alternatively, you can store the results of the benchmark in the
-cache file (`benchmarks/benchmarks.json`) with an `-s` flag:
-
-```console
-make bench flags='-s'
-```
-### To-Dos
-
-- [ ] Add support for nested numeric lists
-- [ ] Add support for `-width` arguments in lists
-- [ ] Add missing macros
-
 ### Links
 
-- [Macros](http://www.schweikhardt.net/man_page_howto.html#q5)
-- [`an` macros](http://linux.die.net/man/7/man)
-- [`doc` macros](https://www.dragonflybsd.org/cgi/web-man?command=mdoc&section=7)
-- [Troff specs](http://cm.bell-labs.com/sys/doc/troff.pdf)
 
 ## License
 
